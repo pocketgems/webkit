@@ -46,7 +46,8 @@
 #include <wtf/MathExtras.h>
 #include <wtf/StringExtras.h>
 #include <wtf/text/StringBuilder.h>
-#include <wtf/unicode/UTF8.h>
+#include <wtf/unicode/WTF_UTF8.h>
+#include <unicode/utf8.h>
 
 using namespace WTF;
 using namespace Unicode;

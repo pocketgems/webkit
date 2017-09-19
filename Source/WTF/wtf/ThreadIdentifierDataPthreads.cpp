@@ -43,6 +43,10 @@
 #include <limits.h>
 #endif
 
+#ifdef __ANDROID__
+#define PTHREAD_KEYS_MAX 1024
+#endif
+
 namespace WTF {
 
 pthread_key_t ThreadIdentifierData::m_key = PTHREAD_KEYS_MAX;

@@ -24,10 +24,14 @@
  */
 
 #include "config.h"
-#include "LowLevelInterpreter.h"
 
+#include "LowLevelInterpreter.h"
 #include "LLIntOfflineAsmConfig.h"
 #include <wtf/InlineASM.h>
+
+#if !USE(JSVALUE32_64)
+#error must be enabled!
+#endif
 
 #if !ENABLE(JIT)
 #include "CLoopStackInlines.h"

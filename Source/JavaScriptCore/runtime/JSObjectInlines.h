@@ -45,7 +45,7 @@ void createListFromArrayLike(ExecState* exec, JSValue arrayLikeValue, RuntimeTyp
     double lengthAsDouble = lengthProperty.toLength(exec);
     if (UNLIKELY(scope.exception()))
         return;
-    RELEASE_ASSERT(lengthAsDouble >= 0.0 && lengthAsDouble == std::trunc(lengthAsDouble));
+    RELEASE_ASSERT(lengthAsDouble >= 0.0 && lengthAsDouble == trunc(lengthAsDouble));
     uint64_t length = static_cast<uint64_t>(lengthAsDouble);
     for (uint64_t index = 0; index < length; index++) {
         JSValue next = arrayLikeValue.get(exec, index);

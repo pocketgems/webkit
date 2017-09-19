@@ -33,7 +33,7 @@
 
 #include <wtf/InlineASM.h>
 
-#if OS(LINUX)
+#if OS(LINUX) && !defined(APPORTABLE)
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -46,7 +46,7 @@ namespace JSC {
 
 static bool isVFPPresent()
 {
-#if OS(LINUX)
+#if OS(LINUX) && !defined(APPORTABLE)
     int fd = open("/proc/self/auxv", O_RDONLY);
     if (fd != -1) {
         Elf32_auxv_t aux;
@@ -58,7 +58,7 @@ static bool isVFPPresent()
         }
         close(fd);
     }
-#endif // OS(LINUX)
+#endif // OS(LINUX) && !defined(APPORTABLE)
 
 #if (COMPILER(GCC_OR_CLANG) && defined(__VFP_FP__))
     return true;

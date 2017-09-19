@@ -102,6 +102,19 @@
 #include <sys/timeb.h>
 #endif
 
+#ifdef __ANDROID__
+#include <time64.h>
+// static time_t timegm(struct tm* const t) {
+//    static const time_t kTimeMax = ~(1L << (sizeof(time_t) * 8 - 1));
+//    static const time_t kTimeMin = (1L << (sizeof(time_t) * 8 - 1));
+//    time64_t result = timegm64(t);
+//    if (result < kTimeMin || result > kTimeMax) {
+//        return -1;
+//    }
+//    return result;
+//}
+#endif
+
 using namespace WTF;
 
 namespace WTF {
@@ -430,7 +443,7 @@ static int32_t calculateUTCOffset()
     localt.tm_zone = 0;
 #endif
 
-#if HAVE(TIMEGM)
+#if HAVE(TIMEGM) && !defined(APPORTABLE)
     time_t utcOffset = timegm(&localt) - mktime(&localt);
 #else
     // Using a canned date of 01/01/2009 on platforms with weaker date-handling foo.

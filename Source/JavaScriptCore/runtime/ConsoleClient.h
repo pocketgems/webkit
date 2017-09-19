@@ -26,6 +26,7 @@
 #ifndef ConsoleClient_h
 #define ConsoleClient_h
 
+#include <JSExportMacros.h>
 #include "ConsoleTypes.h"
 #include <wtf/Forward.h>
 

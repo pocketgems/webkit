@@ -33,7 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <wtf/NeverDestroyed.h>
 #include <wtf/Optional.h>
 #include <wtf/text/TextBreakIterator.h>
-#include <wtf/unicode/UTF8.h>
+#include <wtf/unicode/WTF_UTF8.h>
 
 namespace WTF {
 

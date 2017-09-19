@@ -78,6 +78,11 @@
 #include <execinfo.h>
 #endif
 
+#ifdef __ANDROID__
+#include <cxxabi.h>
+#include <dlfcn.h>
+#endif
+
 extern "C" {
 
 static void logToStderr(const char* buffer)

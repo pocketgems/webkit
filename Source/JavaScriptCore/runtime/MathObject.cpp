@@ -30,6 +30,12 @@
 #include <wtf/MathExtras.h>
 #include <wtf/Vector.h>
 
+#if defined(__ANDROID__) && !defined(APPORTABLE)
+static double log2(double x) {
+    return log(x) / log(2.0);
+}
+#endif
+
 namespace JSC {
 
 STATIC_ASSERT_IS_TRIVIALLY_DESTRUCTIBLE(MathObject);

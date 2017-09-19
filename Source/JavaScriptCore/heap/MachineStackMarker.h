@@ -38,7 +38,7 @@
 // This bug has been fixed in FreeBSD 11.0-CURRENT, so this workaround can be
 // removed after FreeBSD 10.x goes EOL.
 // https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=207079
-#if OS(FREEBSD)
+#if OS(FREEBSD) || defined(APPORTABLE)
 #include <ucontext.h>
 #endif
 #endif

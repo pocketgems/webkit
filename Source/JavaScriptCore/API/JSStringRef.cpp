@@ -29,7 +29,7 @@
 
 #include "InitializeThreading.h"
 #include "OpaqueJSString.h"
-#include <wtf/unicode/UTF8.h>
+#include <wtf/unicode/WTF_UTF8.h>
 
 using namespace JSC;
 using namespace WTF::Unicode;
@@ -37,7 +37,7 @@ using namespace WTF::Unicode;
 JSStringRef JSStringCreateWithCharacters(const JSChar* chars, size_t numChars)
 {
     initializeThreading();
-    return &OpaqueJSString::create(chars, numChars).leakRef();
+    return &OpaqueJSString::create((const char16_t*)chars, numChars).leakRef();
 }
 
 JSStringRef JSStringCreateWithUTF8CString(const char* string)
@@ -62,7 +62,7 @@ JSStringRef JSStringCreateWithUTF8CString(const char* string)
 JSStringRef JSStringCreateWithCharactersNoCopy(const JSChar* chars, size_t numChars)
 {
     initializeThreading();
-    return OpaqueJSString::create(StringImpl::createWithoutCopying(chars, numChars)).leakRef();
+    return OpaqueJSString::create(StringImpl::createWithoutCopying((const char16_t *)chars, numChars)).leakRef();
 }
 
 JSStringRef JSStringRetain(JSStringRef string)
@@ -87,7 +87,7 @@ const JSChar* JSStringGetCharactersPtr(JSStringRef string)
 {
     if (!string)
         return nullptr;
-    return string->characters();
+    return (const JSChar *)string->characters();
 }
 
 size_t JSStringGetMaximumUTF8CStringSize(JSStringRef string)

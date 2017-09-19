@@ -919,7 +919,11 @@
 #endif
 
 #ifndef ENABLE_EXCEPTION_SCOPE_VERIFICATION
-#define ENABLE_EXCEPTION_SCOPE_VERIFICATION (!defined(NDEBUG))
+#ifdef NDEBUG
+#define ENABLE_EXCEPTION_SCOPE_VERIFICATION 0
+#else // NDEBUG
+#define ENABLE_EXCEPTION_SCOPE_VERIFICATION 1
+#endif //NDEBUG
 #endif
 
 /* Pick which allocator to use; we only need an executable allocator if the assembler is compiled in.
