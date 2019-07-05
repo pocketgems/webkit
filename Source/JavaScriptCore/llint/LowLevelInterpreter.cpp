@@ -29,7 +29,7 @@
 #include "LLIntOfflineAsmConfig.h"
 #include <wtf/InlineASM.h>
 
-#if !USE(JSVALUE32_64)
+#if !USE(JSVALUE32_64) && !defined(__aarch64__)
 #error must be enabled!
 #endif
 
