@@ -102,7 +102,7 @@
 #include <sys/timeb.h>
 #endif
 
-#ifdef __ANDROID__
+#if defined(__ANDROID__) && !defined(__aarch64__)
 #include <time64.h>
 // static time_t timegm(struct tm* const t) {
 //    static const time_t kTimeMax = ~(1L << (sizeof(time_t) * 8 - 1));
