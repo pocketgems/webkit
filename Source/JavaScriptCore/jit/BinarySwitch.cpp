@@ -135,6 +135,21 @@ bool BinarySwitch::advance(MacroAssembler& jit)
     }
 }
 
+#ifdef APPORTABLE
+class WeakRNG {
+public:
+    WeakRNG(WeakRandom &rng) : _rng(rng) {}
+    typedef size_t result_type;
+    static constexpr result_type min() { return 0; }
+    static constexpr result_type max() { return UINT32_MAX; }
+    result_type operator()() {
+        return (result_type)_rng.getUint32();
+    }
+private:
+    WeakRandom &_rng;
+};
+#endif
+
 void BinarySwitch::build(unsigned start, bool hardStart, unsigned end)
 {
     if (verbose)
@@ -193,6 +208,9 @@ void BinarySwitch::build(unsigned start, bool hardStart, unsigned end)
         for (unsigned i = 0; i < size; ++i)
             localCaseIndices.append(start + i);
         
+#ifdef APPORTABLE
+        std::shuffle(localCaseIndices.begin(), localCaseIndices.end(), WeakRNG(m_weakRandom));
+#else
         std::random_shuffle(
             localCaseIndices.begin(), localCaseIndices.end(),
             [this] (unsigned n) {
@@ -200,7 +218,9 @@ void BinarySwitch::build(unsigned start, bool hardStart, unsigned end)
                 // this introduces a tiny amount of bias, but we're fine with such tiny bias.
                 return m_weakRandom.getUint32() % n;
             });
-        
+#endif
+
+
         for (unsigned i = 0; i < size - 1; ++i) {
             append(BranchCode(NotEqualToPush, localCaseIndices[i]));
             append(BranchCode(ExecuteCase, localCaseIndices[i]));
