@@ -114,7 +114,7 @@ macro(find_package package)
             )
         endif ()
     elseif ("${package}" STREQUAL "ICU")
-        if (ICU_FOUND AND NOT TARGET ICU::data)
+        if (ICU_FOUND AND NOT TARGET ICU::uc)
             add_library(ICU::data UNKNOWN IMPORTED)
             set_target_properties(ICU::data PROPERTIES
                 IMPORTED_LOCATION "${ICU_DATA_LIBRARY}"

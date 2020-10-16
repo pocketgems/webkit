@@ -529,8 +529,6 @@ if (NOT USE_SYSTEM_MALLOC)
 endif ()
 
 list(APPEND WTF_LIBRARIES
-    ICU::data
-    ICU::i18n
     ICU::uc
 )
 

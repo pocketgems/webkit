@@ -124,13 +124,15 @@
 #include <arm/arch.h>
 #endif
 
+#if 0
 #if OS(DARWIN)
 #include <wtf/spi/darwin/ProcessMemoryFootprint.h>
 #elif OS(LINUX)
 #include <wtf/linux/ProcessMemoryFootprint.h>
 #endif
+#endif
 
-#if OS(DARWIN) || OS(LINUX)
+#if 0
 struct MemoryFootprint : ProcessMemoryFootprint {
     MemoryFootprint(const ProcessMemoryFootprint& src)
         : ProcessMemoryFootprint(src)
