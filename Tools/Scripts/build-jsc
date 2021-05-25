@@ -95,6 +95,8 @@ Usage: $programName [options] [options to pass to build system]
   --[no-]use-ccache             Enable (or disable) CCache, if available
 EOF
 
+my $fakeMinimal = 1;
+
 my %options = (
     'analyze!' => \$shouldRunStaticAnalyzer,
     'coverage!' => \$coverageSupport,
@@ -105,7 +107,8 @@ my %options = (
     'makeargs=s' => \$makeArgs,
     'cmakeargs=s' => \@cmakeArgs,
     'build-dir=s' => \$buildDir,
-    'use-ccache!' => \$useCCache
+    'use-ccache!' => \$useCCache,
+    'minimal' => \$fakeMinimal
 );
 
 foreach (@features) {
