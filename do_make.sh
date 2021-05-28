@@ -34,18 +34,30 @@ rm -rf WebKitBuild
 #EXTRA="-DENABLE_JIT=ON -DENABLE_DFG_JIT=ON -DENABLE_FAST_JIT_PERMISSIONS=ON -DUSE_SYSTEM_MALLOC=ON -DDEVELOPER_MODE=OFF -DENABLE_API_TESTS=OFF"
 EXTRA="-DENABLE_JIT=ON -DENABLE_FAST_JIT_PERMISSIONS=ON -DUSE_SYSTEM_MALLOC=ON -DDEVELOPER_MODE=OFF -DENABLE_API_TESTS=OFF"
 
-Tools/Scripts/build-jsc --jsc-only --jit --release --minimal --cmakeargs " -DANDROID_ABI=arm64-v8a -DANDROID_NDK='${ANDROID_NDK}' -DCMAKE_TOOLCHAIN_FILE='${ANDROID_NDK}/build/cmake/android.toolchain.cmake' -DANDROID_NATIVE_API_LEVEL=21 -DANDROID_TOOLCHAIN=clang -DCMAKE_FIND_ROOT_PATH='$(pwd)/external/icu/64' ${EXTRA}"
+LINK_DIRS=$(pwd)/external/icu/64/build/System/*
+LINK_FLAGS=$(for d in ${LINK_DIRS}; do echo -n " -rpath $d "; done)
+LINK_FLAGS="$LINK_FLAGS -rpath ${ANDROID_NDK}/platforms/android-21/arch-arm64/usr/lib -rpath ${ANDROID_NDK}/sources/cxx-stl/llvm-libc++/libs/arm64-v8a"
+
+Tools/Scripts/build-jsc --jsc-only --jit --release --minimal --cmakeargs " -DANDROID_ABI=arm64-v8a -DANDROID_NDK='${ANDROID_NDK}' -DCMAKE_TOOLCHAIN_FILE='${ANDROID_NDK}/build/cmake/android.toolchain.cmake' -DCMAKE_CXX_FLAGS='${LINK_FLAGS}' -DANDROID_NATIVE_API_LEVEL=21 -DANDROID_TOOLCHAIN=clang -DCMAKE_FIND_ROOT_PATH='$(pwd)/external/icu/64' ${EXTRA}"
 
 # Change strip to cp if you need debug symbols
 STRIP_FLAGS="-gx --strip-unneeded"
-"${ANDROID_NDK}/toolchains/llvm/prebuilt/linux-x86_64/aarch64-linux-android/bin/strip" WebKitBuild/Release/lib/libJavaScriptCore.so ${STRIP_FLAGS} -o "${DEST}/arm64-v8a/libJavascriptCore.so"
+HOST=linux
+if [ $(uname) = "Darwin" ]; then
+    HOST=darwin
+fi
+"${ANDROID_NDK}/toolchains/llvm/prebuilt/$HOST-x86_64/aarch64-linux-android/bin/strip" WebKitBuild/Release/lib/libJavaScriptCore.so ${STRIP_FLAGS} -o "${DEST}/arm64-v8a/libJavascriptCore.so"
 cp WebKitBuild/Release/lib/libJavaScriptCore.so symbols/arm64-v8a/libJavascriptCore.so
 
 rm -rf WebKitBuild
 
-Tools/Scripts/build-jsc --ftl-jit --jsc-only --jit --release --minimal --cmakeargs " -DANDROID_ABI=armeabi-v7a -DANDROID_NDK='${ANDROID_NDK}' -DCMAKE_TOOLCHAIN_FILE='${ANDROID_NDK}/build/cmake/android.toolchain.cmake' -DANDROID_NATIVE_API_LEVEL=21 -DANDROID_TOOLCHAIN=clang -DCMAKE_FIND_ROOT_PATH='$(pwd)/external/icu/32' ${EXTRA}"
+LINK_DIRS=$(pwd)/external/icu/32/build/System/*
+LINK_FLAGS=$(for d in ${LINK_DIRS}; do echo -n " -rpath $d "; done)
+LINK_FLAGS="$LINK_FLAGS -rpath ${ANDROID_NDK}/platforms/android-21/arch-arm/usr/lib -rpath ${ANDROID_NDK}/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a"
 
-"${ANDROID_NDK}/toolchains/llvm/prebuilt/linux-x86_64/arm-linux-androideabi/bin/strip" WebKitBuild/Release/lib/libJavaScriptCore.so ${STRIP_FLAGS} -o "${DEST}/armeabi-v7a/libJavascriptCore.so"
+Tools/Scripts/build-jsc --ftl-jit --jsc-only --jit --release --minimal --cmakeargs " -DANDROID_ABI=armeabi-v7a -DANDROID_NDK='${ANDROID_NDK}' -DCMAKE_TOOLCHAIN_FILE='${ANDROID_NDK}/build/cmake/android.toolchain.cmake' -DCMAKE_CXX_FLAGS='${LINK_FLAGS}' -DANDROID_NATIVE_API_LEVEL=21 -DANDROID_TOOLCHAIN=clang -DCMAKE_FIND_ROOT_PATH='$(pwd)/external/icu/32' ${EXTRA}"
+
+"${ANDROID_NDK}/toolchains/llvm/prebuilt/$HOST-x86_64/arm-linux-androideabi/bin/strip" WebKitBuild/Release/lib/libJavaScriptCore.so ${STRIP_FLAGS} -o "${DEST}/armeabi-v7a/libJavascriptCore.so"
 cp WebKitBuild/Release/lib/libJavaScriptCore.so symbols/armeabi-v7a/libJavascriptCore.so
 
 SYMBOL_ARCHIVE="javascriptcore-symbols-$(git rev-parse HEAD).tar.gz"
